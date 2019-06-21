@@ -1,0 +1,34 @@
+{
+    "paths": [
+        {
+            "name": "/zones",
+            "lambdaFunction": "zonelambda",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "irrigation",
+    "apiName": "irrigation",
+    "functionArns": [
+        {
+            "lambdaFunction": "zonelambda"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "irrigation-ui-prod-20190621115852-authRole",
+        "unAuthRoleName": "irrigation-ui-prod-20190621115852-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "zonelambda",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}

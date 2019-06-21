@@ -1,0 +1,13 @@
+{
+  "serverless": {
+    "project": "irrigation-ui",
+    "provider": "aws",
+    "skipInstall": false,
+    "directory": ".",
+    "clientProject": "irrigation-ui",
+    "serverless": {
+      "aws": {},
+      "gcloud": {}
+    }
+  }
+}
