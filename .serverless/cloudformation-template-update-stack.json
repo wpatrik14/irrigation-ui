@@ -103,7 +103,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/irrigation-ui/production/1561114291085-2019-06-21T10:51:31.085Z/irrigation-ui.zip"
+          "S3Key": "serverless/irrigation-ui/production/1561125440594-2019-06-21T13:57:20.594Z/irrigation-ui.zip"
         },
         "FunctionName": "irrigation-ui-production-api",
         "Handler": "lambda.universal",
@@ -122,14 +122,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "ApiLambdaVersionui5E6GKW7PcIkdeUl4uhA7G0Z2r7r667F0ZbQUbYFQ": {
+    "ApiLambdaVersionuKqFs1njhOLAeq0yFARsC1nCDqi45NmuJy5RAfE1onQ": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ApiLambdaFunction"
         },
-        "CodeSha256": "dQzu89bTQe7vIEyOOPFIULS8zkBnnr8eLi0SA/8sICU="
+        "CodeSha256": "mPk2EhjGhjC1/G3HSCoZH1JfzilZFUm+Ws18UQPF6hM="
       }
     },
     "ApiGatewayRestApi": {
@@ -247,7 +247,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1561114166829": {
+    "ApiGatewayDeployment1561125306113": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -317,7 +317,7 @@
     "ApiLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ApiLambdaVersionui5E6GKW7PcIkdeUl4uhA7G0Z2r7r667F0ZbQUbYFQ"
+        "Ref": "ApiLambdaVersionuKqFs1njhOLAeq0yFARsC1nCDqi45NmuJy5RAfE1onQ"
       }
     },
     "ServiceEndpoint": {
