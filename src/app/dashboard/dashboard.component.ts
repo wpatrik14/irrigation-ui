@@ -20,10 +20,10 @@ export class DashboardComponent implements OnInit {
   async switchZone1(event: MatSlideToggleChange) {
     if (event.checked) {
       this.zoneStatus1 = "ON";
-      this.zoneService.switchOn();
+      this.zoneService.switchOn().subscribe(result => this.zoneStatus1 = result);
     } else {
       this.zoneStatus1 = "OFF";
-      this.zoneService.switchOff();
+      this.zoneService.switchOff().subscribe(result => this.zoneStatus1 = result);
       
     }
   }

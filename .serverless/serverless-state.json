@@ -119,7 +119,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/irrigation-ui/production/1561235884790-2019-06-22T20:38:04.790Z/irrigation-ui.zip"
+                "S3Key": "serverless/irrigation-ui/production/1561304093076-2019-06-23T15:34:53.076Z/irrigation-ui.zip"
               },
               "FunctionName": "irrigation-ui-production-api",
               "Handler": "lambda.universal",
@@ -138,14 +138,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "ApiLambdaVersionTsDuLZbJS20C1Lq0KcPUCxhGrOB6nNGvPwv0jMlA": {
+          "ApiLambdaVersionaC9yTZpwoHhgAcvD6F8iPx98eX5LYR4sgVfqlEiikUE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "nt1rOxUPLeJTUBuO7/5MuPSPgsiHu2F23c3fmosoSv8="
+              "CodeSha256": "rzWLpSyeqEIx7oGJ9qD9H160frOGF0/0ecf8OtTOKuk="
             }
           },
           "ApiGatewayRestApi": {
@@ -263,7 +263,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1561235775951": {
+          "ApiGatewayDeployment1561303971112": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -333,7 +333,7 @@
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersionTsDuLZbJS20C1Lq0KcPUCxhGrOB6nNGvPwv0jMlA"
+              "Ref": "ApiLambdaVersionaC9yTZpwoHhgAcvD6F8iPx98eX5LYR4sgVfqlEiikUE"
             }
           },
           "ServiceEndpoint": {
@@ -420,7 +420,7 @@
     "artifact": "C:\\Users\\wpatr\\Documents\\projects\\irrigation-ui\\.serverless\\irrigation-ui.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/irrigation-ui/production/1561235884790-2019-06-22T20:38:04.790Z",
+    "artifactDirectoryName": "serverless/irrigation-ui/production/1561304093076-2019-06-23T15:34:53.076Z",
     "artifact": "irrigation-ui.zip"
   }
 }
