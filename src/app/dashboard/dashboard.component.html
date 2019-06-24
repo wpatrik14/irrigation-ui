@@ -4,9 +4,11 @@
     <mat-card-subtitle>AWS Endpoint: {{zone.endpoint}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <p>Details will come here like pin: {{zone.pin}}</p>
+    <p><b>GPIO pin:</b> {{zone.pin}}</p>
+    <p><b>Start time:</b> {{zone.startTime}}</p>
+    <p><b>End time:</b> {{zone.endTime}}</p>
   </mat-card-content>
   <mat-card-actions>
-    <mat-slide-toggle (change)="switchZone($event, zone)" checked={{zone.status}}>{{zone.statusDesc}}</mat-slide-toggle>
+    <mat-slide-toggle (change)="switchZone($event, zone)" checked={{zone.status}}></mat-slide-toggle>
   </mat-card-actions>
 </mat-card>

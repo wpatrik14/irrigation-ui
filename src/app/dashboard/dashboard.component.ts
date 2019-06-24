@@ -20,16 +20,15 @@ export class DashboardComponent implements OnInit {
   }
 
   switchZone(event: MatSlideToggleChange, zone: IZone) {
-    zone.statusDesc = "Waiting...";
     if (event.checked) {
       this.zoneService.switch(zone.endpoint, zone.pin, zone.name, true).subscribe(result => {
-        zone.statusDesc = result;
-        zone.status = true;
+        zone.status = result.status;
+        zone.startTime = result.startTime;
       });
     } else {
       this.zoneService.switch(zone.endpoint, zone.pin, zone.name, false).subscribe(result => {
-        zone.statusDesc = result;
-        zone.status = false;
+        zone.status = result.status;
+        zone.endTime = result.endTime;
       });
     }
   }

@@ -15,9 +15,8 @@ export class ZoneService {
     return this.httpClient.post<any>(this.zoneApiUrl, {
       endpoint,
       pin,
-      status,
-      lastStartTime: new Date().toISOString(),
-      lastEndTime: new Date().toISOString()
+      name,
+      status
     });
   }
 
