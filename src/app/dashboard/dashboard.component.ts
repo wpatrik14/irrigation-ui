@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ZoneService } from '../zone.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { IZone } from 'src/model/model';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,22 +10,27 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 })
 export class DashboardComponent implements OnInit {
 
-  zoneStatus1: string = "OFF";
+  zones: IZone[] = [];
 
-  constructor(private zoneService: ZoneService) { }
-
-  ngOnInit() {
-
+  constructor(private zoneService: ZoneService) {
   }
 
-  async switchZone1(event: MatSlideToggleChange) {
+  ngOnInit() {
+    this.zoneService.getAllZones().subscribe(result => this.zones = result);
+  }
+
+  switchZone(event: MatSlideToggleChange, zone: IZone) {
+    zone.statusDesc = "Waiting...";
     if (event.checked) {
-      this.zoneStatus1 = "ON";
-      this.zoneService.switchOn().subscribe(result => this.zoneStatus1 = result);
+      this.zoneService.switch(zone.endpoint, zone.pin, zone.name, true).subscribe(result => {
+        zone.statusDesc = result;
+        zone.status = true;
+      });
     } else {
-      this.zoneStatus1 = "OFF";
-      this.zoneService.switchOff().subscribe(result => this.zoneStatus1 = result);
-      
+      this.zoneService.switch(zone.endpoint, zone.pin, zone.name, false).subscribe(result => {
+        zone.statusDesc = result;
+        zone.status = false;
+      });
     }
   }
 
