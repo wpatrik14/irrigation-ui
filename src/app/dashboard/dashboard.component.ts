@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ZoneService } from '../zone.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { IZone } from 'src/model/model';
+import { IZoneView, ZoneConverter } from 'src/view/view';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,25 +11,26 @@ import { IZone } from 'src/model/model';
 })
 export class DashboardComponent implements OnInit {
 
-  zones: IZone[] = [];
+  zones: IZoneView[] = [];
 
   constructor(private zoneService: ZoneService) {
   }
 
   ngOnInit() {
-    this.zoneService.getAllZones().subscribe(result => this.zones = result);
+    this.zoneService.getAllZones().subscribe(result => this.zones = ZoneConverter.convertZones(result));
   }
 
-  switchZone(event: MatSlideToggleChange, zone: IZone) {
+  switchZone(event: MatSlideToggleChange, zone: IZoneView) {
     if (event.checked) {
-      this.zoneService.switch(zone.endpoint, zone.pin, zone.name, true).subscribe(result => {
+      this.zoneService.switch(zone.endpoint, zone.pin, true).subscribe(result => {
         zone.status = result.status;
-        zone.startTime = result.startTime;
+        zone.startTime = new Date(result.startTime).toString();
       });
     } else {
-      this.zoneService.switch(zone.endpoint, zone.pin, zone.name, false).subscribe(result => {
+      this.zoneService.switch(zone.endpoint, zone.pin, false).subscribe(result => {
         zone.status = result.status;
-        zone.endTime = result.endTime;
+        zone.endTime = new Date(result.endTime).toString();
+        zone.duration = (zone.endTime>zone.startTime) ? (result.endTime-result.startTime) / 60000 : 0;
       });
     }
   }

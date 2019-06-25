@@ -3,6 +3,6 @@ export interface IZone {
     pin: string,
     name: string,
     status: boolean,
-    startTime: string,
-    endTime: string
+    startTime: number,
+    endTime: number
 }
