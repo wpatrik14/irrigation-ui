@@ -16,7 +16,7 @@ export class ZoneConverter {
     static convertZone(zone: IZone): IZoneView {
         const startTime = new Date(zone.startTime);
         const endTime = new Date(zone.endTime);
-        
+        const duration = (zone.endTime>zone.startTime) ? (zone.endTime-zone.startTime) / 60000 : 0;
         
         return {
             endpoint: zone.endpoint,
