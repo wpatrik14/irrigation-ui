@@ -24,12 +24,12 @@ export class DashboardComponent implements OnInit {
     if (event.checked) {
       this.zoneService.switch(zone.endpoint, zone.pin, true).subscribe(result => {
         zone.status = result.status;
-        zone.startTime = new Date(result.startTime).toString();
+        zone.startTime = new Date(result.startTime).toLocaleString();
       });
     } else {
       this.zoneService.switch(zone.endpoint, zone.pin, false).subscribe(result => {
         zone.status = result.status;
-        zone.endTime = new Date(result.endTime).toString();
+        zone.endTime = new Date(result.endTime).toLocaleString();
         zone.duration = (zone.endTime>zone.startTime) ? (result.endTime-result.startTime) / 60000 : 0;
       });
     }

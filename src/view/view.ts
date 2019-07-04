@@ -23,8 +23,8 @@ export class ZoneConverter {
             pin: zone.pin,
             name: zone.name,
             status: zone.status,
-            startTime: startTime.toString(),
-            endTime: endTime.toString(),
+            startTime: startTime.toLocaleString(),
+            endTime: endTime.toLocaleString(),
             duration: duration
         }
     }
