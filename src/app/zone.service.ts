@@ -1,35 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { IZone } from 'src/model/model';
+import { ZoneView } from 'src/api/entities';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ZoneService {
 
-  private zoneApiUrl = "https://hmuxe3xutc.execute-api.eu-central-1.amazonaws.com/prod/switchZone";
+  private zoneApiUrl = "https://3abr666e43.execute-api.eu-central-1.amazonaws.com/dev";
 
   constructor(private httpClient: HttpClient) { }
 
-  public switch(endpoint: string, pin: string, status: boolean): Observable<any> {
-    return this.httpClient.post<IZone>(this.zoneApiUrl, {
-      endpoint,
-      pin,
+  public updateRelay(relayId: number, status: boolean): Observable<any> {
+    return this.httpClient.post<ZoneView>(`${this.zoneApiUrl}/areas/zones/relay/${relayId}/switch`, {
       status
     });
   }
 
-  public getAllZones() {
-    return this.httpClient.get<IZone[]>(this.zoneApiUrl);
+  public getZones() {
+    return this.httpClient.get<ZoneView[]>(`${this.zoneApiUrl}/areas/1/zones`);
   }
 
-  public getZoneStatus(endpoint: string, pin: string) {
-    return this.httpClient.get<IZone>(this.zoneApiUrl, {
-      params: {
-        endpoint,
-        pin
-      }
-    });
+  public getZone() {
+    return this.httpClient.get<ZoneView>(`${this.zoneApiUrl}/areas/zones/1`);
   }
 }
