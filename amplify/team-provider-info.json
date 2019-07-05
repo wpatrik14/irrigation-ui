@@ -1,0 +1,14 @@
+{
+    "production": {
+        "awscloudformation": {
+            "AuthRoleName": "irrigation-ui-production-20190705131912-authRole",
+            "UnauthRoleArn": "arn:aws:iam::981419062120:role/irrigation-ui-production-20190705131912-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::981419062120:role/irrigation-ui-production-20190705131912-authRole",
+            "Region": "eu-central-1",
+            "DeploymentBucketName": "irrigation-ui-production-20190705131912-deployment",
+            "UnauthRoleName": "irrigation-ui-production-20190705131912-unauthRole",
+            "StackName": "irrigation-ui-production-20190705131912",
+            "StackId": "arn:aws:cloudformation:eu-central-1:981419062120:stack/irrigation-ui-production-20190705131912/b7b30350-9f16-11e9-957e-026d43bbed96"
+        }
+    }
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ZoneService } from '../zone.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { ZoneView } from 'src/api/entities';
+import { ZoneView } from 'src/app/entities';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,19 +16,23 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.zoneService.getZones().subscribe(result => this.zones = result);
+    this.zoneService.getZones(1).subscribe(result => this.zones = result);
   }
 
   switchZone(event: MatSlideToggleChange, zone: ZoneView) {
     if (event.checked) {
-      this.zoneService.updateRelay(1, true).subscribe(result => {
+      this.zoneService.switchRelay(zone.relay.id, true).subscribe(result => {
         zone.relay.status = result.status;
-        zone.relay.updatedOnUTC = result.updatedOnUTC;
+        zone.relay.lastStartOnUTC = result.lastStartOnUTC;
+        zone.relay.lastEndOnUTC = result.lastEndOnUTC;
+        zone.relay.duration=0;
       });
     } else {
-      this.zoneService.updateRelay(1, false).subscribe(result => {
+      this.zoneService.switchRelay(zone.relay.id, false).subscribe(result => {
         zone.relay.status = result.status;
-        zone.relay.updatedOnUTC = result.updatedOnUTC;
+        zone.relay.lastStartOnUTC = result.lastStartOnUTC;
+        zone.relay.lastEndOnUTC = result.lastEndOnUTC;
+        zone.relay.duration = result.lastEndOnUTC.getTime();
       });
     }
   }

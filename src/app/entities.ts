@@ -29,7 +29,9 @@ export interface RelayView {
     endpoint: string;
     gpio: string;
     status: boolean;
-    updatedOnUTC?: Date;
+    lastStartOnUTC?: Date;
+    lastEndOnUTC?: Date;
+    duration?: number;
 }
 
 export interface ScheduleView {
@@ -44,7 +46,7 @@ export interface SensorView {
     endpoint: string;
     gpio: string;
     updatedOnUTC?: Date;
-    value: number;
+    value: string;
     zone?: ZoneView;
 }
 
@@ -70,12 +72,10 @@ export interface ZoneView {
     forecast?: ForecastView;
     schedule?: ScheduleView;
     location?: LocationView;
-    area: AreaView;
-    waterUsages: WaterUsageView[];
+    area?: AreaView;
+    waterUsages?: WaterUsageView[];
     name: string;
     runningLimitInMinutes?: number;
-    lastStartOnUTC?: Date;
-    lastEndOnUTC?: Date;
     surfaceSizeInMeter2?: number;
     waitTimeInMinutes?: number;
 }
