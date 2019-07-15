@@ -16,7 +16,13 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.zoneService.getZones(1).subscribe(result => this.zones = result);
+    this.zoneService.getZones(1).subscribe(result => {
+      this.zones = result;
+      this.zones.forEach(zone => {
+        const duration = new Date(zone.relay.lastEndOnUTC).getTime() - new Date(zone.relay.lastStartOnUTC).getTime();
+        zone.relay.duration = duration / 1000;
+      })
+    });
   }
 
   switchZone(event: MatSlideToggleChange, zone: ZoneView) {
@@ -25,14 +31,15 @@ export class DashboardComponent implements OnInit {
         zone.relay.status = result.status;
         zone.relay.lastStartOnUTC = result.lastStartOnUTC;
         zone.relay.lastEndOnUTC = result.lastEndOnUTC;
-        zone.relay.duration=0;
+        zone.relay.duration = 0;
       });
     } else {
       this.zoneService.switchRelay(zone.relay.id, false).subscribe(result => {
         zone.relay.status = result.status;
         zone.relay.lastStartOnUTC = result.lastStartOnUTC;
         zone.relay.lastEndOnUTC = result.lastEndOnUTC;
-        zone.relay.duration = result.lastEndOnUTC.getTime();
+        const duration = new Date(zone.relay.lastEndOnUTC).getTime() - new Date(zone.relay.lastStartOnUTC).getTime();
+        zone.relay.duration = duration / 1000;
       });
     }
   }
