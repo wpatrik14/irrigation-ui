@@ -4,11 +4,15 @@
     <mat-card-subtitle>Available</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <p><b>GPIO pin:</b> {{zone.relay.gpio}}</p>
-    <p><b>Last start time:</b> {{zone.relay.lastStartOnUTC.toLocaleString()}}</p>
-    <p><b>Last end time:</b> {{zone.relay.lastEndOnUTC.toLocaleString()}}</p>
-    <p><b>Duration:</b> {{zone.relay.duration}} secs</p>
-    <p><b>Sensor value:</b> {{zone.sensors[0].value}}</p>
+    <p><b>Last start time:</b> {{zone.relay.lastStartOnUTC}}</p>
+    <p><b>Last end time:</b> {{zone.relay.lastEndOnUTC}}</p>
+    <p><b>Duration:</b> {{zone.relay.duration | number: '.0-2'}} minutes</p>
+    <p><b>Sensor values:</b></p>
+    <mat-list dense >
+      <mat-list-item *ngFor="let sensor of zone.sensors">
+        {{sensor.value}} on {{sensor.updatedOnUTC}}
+      </mat-list-item>
+    </mat-list>
   </mat-card-content>
   <mat-card-actions>
     <mat-slide-toggle (change)="switchZone($event, zone)" [checked]="zone.relay.status"></mat-slide-toggle>

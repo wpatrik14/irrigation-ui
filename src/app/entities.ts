@@ -27,10 +27,11 @@ export interface PlantView {
 export interface RelayView {
     id?: number;
     endpoint: string;
+    clientId: string;
     gpio: string;
     status: boolean;
-    lastStartOnUTC?: Date;
-    lastEndOnUTC?: Date;
+    lastStartOnUTC?: string;
+    lastEndOnUTC?: string;
     duration?: number;
 }
 
@@ -44,7 +45,7 @@ export interface ScheduleView {
 export interface SensorView {
     id?: number;
     endpoint: string;
-    gpio: string;
+    clientId: string;
     updatedOnUTC?: Date;
     value: string;
     zone?: ZoneView;

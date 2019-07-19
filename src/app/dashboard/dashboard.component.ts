@@ -19,28 +19,36 @@ export class DashboardComponent implements OnInit {
     this.zoneService.getZones(1).subscribe(result => {
       this.zones = result;
       this.zones.forEach(zone => {
-        const duration = new Date(zone.relay.lastEndOnUTC).getTime() - new Date(zone.relay.lastStartOnUTC).getTime();
-        zone.relay.duration = duration / 1000;
+        zone.relay.duration = DashboardComponent.getDuration(zone.relay.lastStartOnUTC, zone.relay.lastEndOnUTC);
       })
     });
   }
 
   switchZone(event: MatSlideToggleChange, zone: ZoneView) {
     if (event.checked) {
-      this.zoneService.switchRelay(zone.relay.id, true).subscribe(result => {
+      this.zoneService.switchRelay(zone.relay, true).subscribe(result => {
         zone.relay.status = result.status;
         zone.relay.lastStartOnUTC = result.lastStartOnUTC;
         zone.relay.lastEndOnUTC = result.lastEndOnUTC;
         zone.relay.duration = 0;
       });
     } else {
-      this.zoneService.switchRelay(zone.relay.id, false).subscribe(result => {
+      this.zoneService.switchRelay(zone.relay, false).subscribe(result => {
         zone.relay.status = result.status;
         zone.relay.lastStartOnUTC = result.lastStartOnUTC;
         zone.relay.lastEndOnUTC = result.lastEndOnUTC;
-        const duration = new Date(zone.relay.lastEndOnUTC).getTime() - new Date(zone.relay.lastStartOnUTC).getTime();
-        zone.relay.duration = duration / 1000;
+        zone.relay.duration = DashboardComponent.getDuration(result.lastStartOnUTC, result.lastEndOnUTC);
       });
+    }
+  }
+
+  static getDuration(startDate: string, endDate: string) {
+    const start = new Date(startDate).getTime();
+    const end = new Date(endDate).getTime();
+    if (end-start>0) {
+      return (end-start) / 1000 / 60;
+    } else {
+      return 0;
     }
   }
 
