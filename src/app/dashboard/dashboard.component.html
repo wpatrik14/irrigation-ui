@@ -1,20 +1,84 @@
 <mat-card *ngFor="let zone of zones">
   <mat-card-header>
     <mat-card-title>{{zone.name}}</mat-card-title>
-    <mat-card-subtitle>Available</mat-card-subtitle>
+    <mat-card-subtitle>{{zone.enabled ? "Active" : "Disabled"}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <p><b>Last start time:</b> {{zone.relay.lastStartOnUTC}}</p>
-    <p><b>Last end time:</b> {{zone.relay.lastEndOnUTC}}</p>
-    <p><b>Duration:</b> {{zone.relay.duration | number: '.0-2'}} minutes</p>
-    <p><b>Sensor values:</b></p>
-    <mat-list dense >
-      <mat-list-item *ngFor="let sensor of zone.sensors">
-        {{sensor.value}} on {{sensor.updatedOnUTC}}
-      </mat-list-item>
-    </mat-list>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Last run
+          </mat-panel-title>
+          <mat-panel-description>
+            Ran {{zone.relay.duration | number: '.0-2'}} minutes
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p>Started on {{zone.relay.lastStartOnUTC | date:'yyyy-MM-dd HH:mm'}}</p>
+        <p>Finished on {{zone.relay.lastEndOnUTC | date:'yyyy-MM-dd HH:mm'}}</p>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Forecast
+          </mat-panel-title>
+          <mat-panel-description>
+            {{zone.forecast && zone.forecast.enabled ? "Active" : "Disabled"}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p>Hours: {{zone.forecast ? zone.forecast.hours : "Not specified"}}</p>
+        <p>Millimeter: {{zone.forecast ? zone.forecast.mm : "Not specified"}}</p>
+        <p>Calculation: {{zone.forecast ? zone.forecast.calculation : "Not specified"}}</p>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Scheduling
+          </mat-panel-title>
+          <mat-panel-description>
+            {{zone.schedules ? zone.schedules.length +" schedule(s) available" : "No schedules"}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-list>
+            <mat-list-item *ngFor="let schedule of zone.schedules">
+                <p>Cron expression: {{zone.schedule ? zone.schedule.cronExpression : "Not specified"}}</p>
+                <p>Duration (mins): {{zone.schedule ? zone.schedule.durationInMinutes : "Not specified"}}</p>
+            </mat-list-item>
+          </mat-list>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Details
+          </mat-panel-title>
+          <mat-panel-description>
+            Location, plant, soil, water usages
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p>Plant: {{zone.plant ? zone.plant.name : "Not specified"}}</p>
+        <p>Soil: {{zone.soil ? zone.soil.name : "Not specified"}}</p>
+        <p>Location: {{zone.location ? zone.location.longitude + " " + zone.location.latitude : "Not provided"}}</p>
+        <p>Water usage: {{zone.waterUsages ? "Click for details" : "No data available"}}</p>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Sensor values
+          </mat-panel-title>
+          <mat-panel-description>
+            {{zone.sensors ? zone.sensors.length +" sensor(s) available" : "No sensors attached" }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-list>
+          <mat-list-item *ngFor="let sensor of zone.sensors">
+            {{sensor.value}} on {{sensor.updatedOnUTC | date:'yyyy-MM-dd HH:mm'}}
+          </mat-list-item>
+        </mat-list>
+      </mat-expansion-panel>
+    </mat-accordion>
   </mat-card-content>
   <mat-card-actions>
-    <mat-slide-toggle (change)="switchZone($event, zone)" [checked]="zone.relay.status"></mat-slide-toggle>
+    <mat-slide-toggle (change)="switchZone($event, zone)" [checked]="zone.relay.status">Irrigation is turned
+      {{zone.relay.status ? "ON": "OFF"}}</mat-slide-toggle>
   </mat-card-actions>
 </mat-card>

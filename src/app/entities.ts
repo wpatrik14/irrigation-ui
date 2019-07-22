@@ -71,11 +71,12 @@ export interface ZoneView {
     soil?: SoilView;
     plant?: PlantView;
     forecast?: ForecastView;
-    schedule?: ScheduleView;
+    schedules?: ScheduleView[];
     location?: LocationView;
     area?: AreaView;
     waterUsages?: WaterUsageView[];
     name: string;
+    enabled: boolean;
     runningLimitInMinutes?: number;
     surfaceSizeInMeter2?: number;
     waitTimeInMinutes?: number;
