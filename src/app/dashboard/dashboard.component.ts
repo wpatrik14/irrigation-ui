@@ -5,6 +5,7 @@ import { ZoneView } from 'src/app/entities';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface DialogData {
+  name: string;
   duration: number;
 }
 

@@ -56,4 +56,5 @@ node_modules/
 aws-exports.js
 awsconfiguration.json
 
-.serverless
+#serverless
+/.serverless
