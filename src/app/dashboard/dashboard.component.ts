@@ -1,7 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject} from '@angular/core';
 import { ZoneService } from '../zone.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ZoneView } from 'src/app/entities';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
+export interface DialogData {
+  duration: number;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +17,7 @@ export class DashboardComponent implements OnInit {
 
   zones: ZoneView[] = [];
 
-  constructor(private zoneService: ZoneService) {
+  constructor(private zoneService: ZoneService, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -26,14 +31,26 @@ export class DashboardComponent implements OnInit {
 
   switchZone(event: MatSlideToggleChange, zone: ZoneView) {
     if (event.checked) {
-      this.zoneService.switchRelay(zone.relay, true).subscribe(result => {
-        zone.relay.status = result.status;
-        zone.relay.lastStartOnUTC = result.lastStartOnUTC;
-        zone.relay.lastEndOnUTC = result.lastEndOnUTC;
-        zone.relay.duration = 0;
+      const dialogRef = this.dialog.open(SwitchDialog, {
+        width: '350px',
+        data: {name: zone.name}});
+  
+      dialogRef.afterClosed().subscribe(result => {
+        let duration: number = 0;
+        if (result) {
+          duration = parseInt(result);
+        } else {
+          duration = 0;
+        }
+        this.zoneService.switchOn(zone.relay, duration).subscribe(result => {
+          zone.relay.status = result.status;
+          zone.relay.lastStartOnUTC = result.lastStartOnUTC;
+          zone.relay.lastEndOnUTC = result.lastEndOnUTC;
+          zone.relay.duration = 0;
+        });
       });
     } else {
-      this.zoneService.switchRelay(zone.relay, false).subscribe(result => {
+      this.zoneService.switchOff(zone.relay).subscribe(result => {
         zone.relay.status = result.status;
         zone.relay.lastStartOnUTC = result.lastStartOnUTC;
         zone.relay.lastEndOnUTC = result.lastEndOnUTC;
@@ -50,6 +67,22 @@ export class DashboardComponent implements OnInit {
     } else {
       return 0;
     }
+  }
+
+}
+
+@Component({
+  selector: 'switch-dialog',
+  templateUrl: 'switch.dialog.html',
+})
+export class SwitchDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<SwitchDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
 }

@@ -12,12 +12,22 @@ export class ZoneService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public switchRelay(relay: RelayView, status: boolean): Observable<RelayView> {
+  public switchOff(relay: RelayView): Observable<RelayView> {
     return this.httpClient.post<RelayView>(`${this.zoneApiUrl}/areas/zones/relay/switch`, {
       endpoint: relay.endpoint,
       clientId: relay.clientId,
       gpio: relay.gpio,
-      status      
+      status: false
+    });
+  }
+
+  public switchOn(relay: RelayView, duration: number): Observable<RelayView> {
+    return this.httpClient.post<RelayView>(`${this.zoneApiUrl}/areas/zones/relay/switch`, {
+      endpoint: relay.endpoint,
+      clientId: relay.clientId,
+      gpio: relay.gpio,
+      duration,
+      status: true    
     });
   }
 
