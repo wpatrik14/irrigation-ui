@@ -78,7 +78,10 @@
     </mat-accordion>
   </mat-card-content>
   <mat-card-actions>
+    <div [hidden]="!zone.relay.status">
+      <mat-progress-bar mode="determinate" value="40"></mat-progress-bar>
+    </div>
     <mat-slide-toggle (change)="switchZone($event, zone)" [checked]="zone.relay.status">Irrigation is turned
-      {{zone.relay.status ? "ON": "OFF"}}</mat-slide-toggle>
+        {{zone.relay.status ? "ON": "OFF"}}</mat-slide-toggle>
   </mat-card-actions>
 </mat-card>

@@ -15,6 +15,7 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent, SwitchDialog } from './dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
 import {MatButtonModule} from '@angular/material/button';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import {MatButtonModule} from '@angular/material/button';
     MatExpansionModule,
     MatDialogModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent],
