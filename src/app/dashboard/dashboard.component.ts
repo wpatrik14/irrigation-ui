@@ -3,9 +3,10 @@ import { ZoneService } from '../zone.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ZoneView } from 'src/app/entities';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { interval } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 export interface DialogData {
-  name: string;
   duration: number;
 }
 
@@ -34,21 +35,21 @@ export class DashboardComponent implements OnInit {
     if (event.checked) {
       const dialogRef = this.dialog.open(SwitchDialog, {
         width: '350px',
-        data: {name: zone.name}});
+        data: {}});
   
       dialogRef.afterClosed().subscribe(result => {
-        let duration: number = 0;
         if (result) {
-          duration = parseInt(result);
+          const duration = parseInt(result);
+          this.zoneService.switchOn(zone.relay, duration).subscribe(result => {
+            zone.relay.status = result.status;
+            zone.relay.lastStartOnUTC = result.lastStartOnUTC;
+            zone.relay.lastEndOnUTC = result.lastEndOnUTC;
+          });
+          // const numbers = interval(1000);
+          // numbers.pipe(take(duration*60)).subscribe(val => zone.relay.duration=val);
         } else {
-          duration = 0;
+          event.source.toggle();
         }
-        this.zoneService.switchOn(zone.relay, duration).subscribe(result => {
-          zone.relay.status = result.status;
-          zone.relay.lastStartOnUTC = result.lastStartOnUTC;
-          zone.relay.lastEndOnUTC = result.lastEndOnUTC;
-          zone.relay.duration = 0;
-        });
       });
     } else {
       this.zoneService.switchOff(zone.relay).subscribe(result => {
