@@ -67,7 +67,8 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "irrigation-ui:build:production"
+              "browserTarget": "irrigation-ui:build:production",
+              "proxyConfig": "proxy.conf.json"
             }
           }
         },
