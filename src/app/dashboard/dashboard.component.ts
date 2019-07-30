@@ -45,8 +45,6 @@ export class DashboardComponent implements OnInit {
             zone.relay.lastStartOnUTC = result.lastStartOnUTC;
             zone.relay.lastEndOnUTC = result.lastEndOnUTC;
           });
-          // const numbers = interval(1000);
-          // numbers.pipe(take(duration*60)).subscribe(val => zone.relay.duration=val);
         } else {
           event.source.toggle();
         }
