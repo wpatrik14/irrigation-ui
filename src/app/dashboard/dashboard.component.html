@@ -11,7 +11,7 @@
             Last run
           </mat-panel-title>
           <mat-panel-description>
-            {{zone.relay.duration | number: '.0-2'}} minutes
+            {{zone.relay.durationInfo}}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <p>Started on {{zone.relay.lastStartOnUTC | date:'yyyy-MM-dd HH:mm'}}</p>
@@ -23,12 +23,20 @@
             Forecast
           </mat-panel-title>
           <mat-panel-description>
-            {{zone.forecast && zone.forecast.enabled ? "Active" : "Disabled"}}
+            {{zone.forecast ? "Specified" : "Not specified"}}
           </mat-panel-description>
         </mat-expansion-panel-header>
-        <p>Hours: {{zone.forecast ? zone.forecast.hours : "Not specified"}}</p>
-        <p>Millimeter: {{zone.forecast ? zone.forecast.mm : "Not specified"}}</p>
-        <p>Calculation: {{zone.forecast ? zone.forecast.calculation : "Not specified"}}</p>
+        <div *ngIf="zone.forecast">
+          <p>{{zone.forecast.enabled ? "Active" : "Deactivated"}}</p>
+          <p>Hours: {{zone.forecast ? zone.forecast.hours : "Not specified"}}</p>
+          <p>Millimeter: {{zone.forecast ? zone.forecast.mm : "Not specified"}}</p>
+          <p>Calculation: {{zone.forecast ? zone.forecast.calculation : "Not specified"}}</p>
+          <button mat-stroked-button (click)="addForecast(zone)">Edit forecast</button>
+          <button mat-stroked-button (click)="toogleForecast(zone)">{{zone.forecast.enabled ? "Deactivate" : "Activate"}}</button>
+        </div>
+        <div *ngIf="!zone.forecast">
+          <button mat-stroked-button (click)="addForecast(zone)">Add forecast</button>
+        </div>
       </mat-expansion-panel>
       <mat-expansion-panel>
         <mat-expansion-panel-header>
@@ -41,9 +49,15 @@
         </mat-expansion-panel-header>
         <mat-list>
             <mat-list-item *ngFor="let schedule of zone.schedules">
-                <p>Cron expression: {{zone.schedule ? zone.schedule.cronExpression : "Not specified"}}</p>
-                <p>Duration (mins): {{zone.schedule ? zone.schedule.durationInMinutes : "Not specified"}}</p>
+                <ul>
+                  <li>{{schedule.enabled ? "Active" : "Disabled"}}</li>
+                  <li>Cron expression: {{schedule.cronExpression}}</li>
+                  <li>Duration (mins): {{schedule.durationInMinutes}}</li>
+                </ul>
+                <button mat-stroked-button (click)="toogleSchedule(zone, schedule)">{{schedule.enabled ? "Deactivate": "Activate"}}</button>
+                <button mat-stroked-button (click)="deleteSchedule(zone, schedule)">Delete</button>
             </mat-list-item>
+            <button mat-stroked-button (click)="addSchedule(zone)">Add schedule</button>
           </mat-list>
       </mat-expansion-panel>
       <mat-expansion-panel>
@@ -78,6 +92,6 @@
     </mat-accordion>
   </mat-card-content>
   <mat-card-actions>
-    <mat-slide-toggle (change)="switchZone($event, zone)" [checked]="zone.relay.status"></mat-slide-toggle>
+    <button mat-raised-button [color]="zone.relay.status ? 'warn': 'primary'" (click)="switch(zone)">{{zone.relay.status ? "Turn OFF" : "Turn ON"}}</button>
   </mat-card-actions>
 </mat-card>

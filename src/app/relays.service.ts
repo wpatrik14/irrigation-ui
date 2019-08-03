@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { ZoneView, RelayView } from 'src/app/entities';
+import { RelayView } from 'src/app/entities';
+import { Socket } from 'ngx-socket-io';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ZoneService {
+export class RelaysService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient, private socket: Socket) { }
 
   public switchOff(relay: RelayView): Observable<RelayView> {
     return this.httpClient.post<RelayView>(`/api/relays/switch`, {
@@ -29,15 +30,7 @@ export class ZoneService {
     });
   }
 
-  public getZones(area: number) {
-    return this.httpClient.get<ZoneView[]>(`/api/zones`, {
-      params: {
-        filter: `area||eq||${area}`
-      }
-    });
-  }
-
-  public getZone(zoneId: number) {
-    return this.httpClient.get<ZoneView>(`/api/zones/${zoneId}`);
+  relayStateChanged(){
+    return this.socket.fromEvent('relayStateChanged');
   }
 }

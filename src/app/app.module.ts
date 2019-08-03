@@ -12,20 +12,28 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule }   from '@angular/forms';
 import { LoginComponent } from './login/login.component';
-import { DashboardComponent, SwitchDialog } from './dashboard/dashboard.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
 import {MatButtonModule} from '@angular/material/button';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { SwitchDialog } from './dashboard/switch-dialog/switch.dialog';
+import { ScheduleDialog } from './dashboard/schedule-dialog/schedule.dialog';
+import { ForecastDialog } from './dashboard/forecast-dialog/forecast.dialog';
+const config: SocketIoConfig = { url: 'http://wpatrik.ddns.net:3000', options: {}};
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    SwitchDialog
+    SwitchDialog,
+    ScheduleDialog,
+    ForecastDialog
   ],
   imports: [
     HttpClientModule,
+    SocketIoModule.forRoot(config),
     BrowserModule,
     FormsModule,
     AppRoutingModule,
@@ -41,6 +49,6 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [SwitchDialog]
+  entryComponents: [SwitchDialog, ScheduleDialog, ForecastDialog]
 })
 export class AppModule { }

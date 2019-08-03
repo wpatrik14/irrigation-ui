@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>{{data ? "Edit Forecast" : "New forecast"}}</h1>
+<div mat-dialog-content>
+  <p>Please provide the forecasting details</p>
+  <mat-form-field>
+    <input type="number" matInput [(ngModel)]="data.hours" placeholder="Hours checked">
+  </mat-form-field>
+  <mat-form-field>
+    <input type="number" matInput [(ngModel)]="data.mm" placeholder="Millimeter limit" >
+  </mat-form-field>
+  <mat-form-field>
+    <input type="text" matInput [(ngModel)]="data.calculation" placeholder="Calculation" >
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>Save</button>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+</div>

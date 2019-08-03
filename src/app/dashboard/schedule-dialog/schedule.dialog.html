@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>New schedule</h1>
+<div mat-dialog-content>
+  <p>Please provide the scheduling details</p>
+  <mat-form-field>
+    <input type="text" matInput [(ngModel)]="data.cronExpression" placeholder="Cron expression">
+  </mat-form-field>
+  <mat-form-field>
+    <input type="number" matInput [(ngModel)]="data.durationInMinutes" placeholder="Duration in minutes" >
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>Save</button>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+</div>
