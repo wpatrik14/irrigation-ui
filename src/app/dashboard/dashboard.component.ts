@@ -9,6 +9,7 @@ import { SwitchDialog } from './switch-dialog/switch.dialog';
 import { ScheduleDialog } from './schedule-dialog/schedule.dialog';
 import { ForecastDialog } from './forecast-dialog/forecast.dialog';
 import { ForecastsService } from '../forecasts.service';
+import { LoadingService } from '../loading/loading.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,7 +18,8 @@ import { ForecastsService } from '../forecasts.service';
 })
 export class DashboardComponent implements OnInit {
 
-  zones: ZoneView[] = [];
+  private zones: ZoneView[] = [];
+  public spinnerRef;
 
   constructor(
     private zonesService: ZonesService, 
@@ -25,7 +27,8 @@ export class DashboardComponent implements OnInit {
     private sensorsService: SensorsService, 
     private schedulesService: SchedulesService,
     private forecastsService: ForecastsService, 
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    public loadingService: LoadingService) {
   }
 
   ngOnInit() {
@@ -38,7 +41,8 @@ export class DashboardComponent implements OnInit {
 
     this.relaysService.relayStateChanged().subscribe((relayView: RelayView) => {
       console.log(`Received socket ${JSON.stringify(relayView)}`);
-      const relay = this.zones.find(zone => zone.relay.clientId===relayView.clientId && zone.relay.gpio===relayView.gpio).relay;
+      const zone = this.zones.find(zone => zone.relay.clientId===relayView.clientId && zone.relay.gpio===relayView.gpio);
+      const relay = zone.relay;
       relay.status = relayView.status;
       relay.lastStartOnUTC = relayView.lastStartOnUTC;
       relay.lastEndOnUTC = relayView.lastEndOnUTC;
@@ -66,7 +70,9 @@ export class DashboardComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           const duration = parseInt(result);
-          this.relaysService.switchOn(zone.relay, duration).subscribe();
+          this.relaysService.switchOn(zone.relay, duration).subscribe(result => {
+           
+          });
         }
       });
     } else {
@@ -113,7 +119,7 @@ export class DashboardComponent implements OnInit {
 
   async toogleForecast(zone: ZoneView) {
     this.forecastsService.toogleForecast(zone.forecast).subscribe(result => {
-      
+      zone.forecast.enabled=result.enabled;
     });
   }
 

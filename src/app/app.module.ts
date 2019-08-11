@@ -15,11 +15,13 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
 import {MatButtonModule} from '@angular/material/button';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { SwitchDialog } from './dashboard/switch-dialog/switch.dialog';
 import { ScheduleDialog } from './dashboard/schedule-dialog/schedule.dialog';
 import { ForecastDialog } from './dashboard/forecast-dialog/forecast.dialog';
+import { LoadingDialog } from './loading/loading.dialog';
+import { LoadingService } from './loading/loading.service';
 const config: SocketIoConfig = { url: 'http://wpatrik.ddns.net:3000', options: {}};
 
 @NgModule({
@@ -29,7 +31,8 @@ const config: SocketIoConfig = { url: 'http://wpatrik.ddns.net:3000', options: {
     DashboardComponent,
     SwitchDialog,
     ScheduleDialog,
-    ForecastDialog
+    ForecastDialog,
+    LoadingDialog
   ],
   imports: [
     HttpClientModule,
@@ -45,10 +48,10 @@ const config: SocketIoConfig = { url: 'http://wpatrik.ddns.net:3000', options: {
     MatDialogModule,
     MatInputModule,
     MatButtonModule,
-    MatProgressBarModule
+    MatProgressSpinnerModule
   ],
-  providers: [],
+  providers: [LoadingService],
   bootstrap: [AppComponent],
-  entryComponents: [SwitchDialog, ScheduleDialog, ForecastDialog]
+  entryComponents: [SwitchDialog, ScheduleDialog, ForecastDialog, LoadingDialog]
 })
 export class AppModule { }
