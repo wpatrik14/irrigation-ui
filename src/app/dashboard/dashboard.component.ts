@@ -18,7 +18,7 @@ import { LoadingService } from '../loading/loading.service';
 })
 export class DashboardComponent implements OnInit {
 
-  private zones: ZoneView[] = [];
+  public zones: ZoneView[] = [];
   public spinnerRef;
 
   constructor(
@@ -36,6 +36,14 @@ export class DashboardComponent implements OnInit {
       this.zones = result;
       this.zones.forEach(zone => {
         zone.relay.durationInfo = DashboardComponent.getDuration(zone.relay.lastStartOnUTC, zone.relay.lastEndOnUTC);
+        zone.sensors.forEach(sensor => {
+          this.sensorsService.getLatestValue(sensor.clientId, 'temperature').subscribe(result => {
+            console.log(result.Items[0].value);
+            sensor.value = result.Items[0].value;
+            sensor.insertedOnUTC = result.Items[0].insertedOnDate;
+            sensor.unit = result.Items[0].unit;
+          });
+        });
       })
     });
 
@@ -53,7 +61,6 @@ export class DashboardComponent implements OnInit {
       console.log(`Received socket ${JSON.stringify(sensorView)}`);
       this.zones.forEach(zone => {
         const sensor = zone.sensors.find(sensor => sensor.clientId===sensorView.clientId);
-        sensor.updatedOnUTC = sensorView.updatedOnUTC;
         sensor.value = sensorView.value;
         return;
       });
