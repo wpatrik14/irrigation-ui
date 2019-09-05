@@ -22,44 +22,6 @@ export class DashboardComponent implements OnInit {
   public zones: ZoneView[] = [];
   public spinnerRef;
 
-  public options: any = {
-    chart: {
-      type: 'scatter',
-      height: 700
-    },
-    title: {
-      text: 'Sample Scatter Plot'
-    },
-    credits: {
-      enabled: false
-    },
-    tooltip: {
-      formatter: function() {
-        return `x: ${Highcharts.dateFormat('%e %b %y %H:%M:%S', this.x)} y: ${this.y.toFixed(2)}`;
-      }
-    },
-    xAxis: {
-      type: 'datetime',
-      labels: {
-        formatter: function() {
-          return Highcharts.dateFormat('%e %b %y', this.value);
-        }
-      }
-    },
-    series: [
-      {
-        name: 'Normal',
-        turboThreshold: 500000,
-        data: [[new Date('2018-01-25 18:38:31').getTime(), 2]]
-      },
-      {
-        name: 'Abnormal',
-        turboThreshold: 500000,
-        data: [[new Date('2018-02-05 18:38:31').getTime(), 7]]
-      }
-    ]
-  };
-
   constructor(
     private zonesService: ZonesService, 
     private relaysService: RelaysService, 
@@ -71,7 +33,48 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    Highcharts.chart('container', this.options);
+    this.sensorsService.getAllValues('7c874a3a-aa00-11e9-a2a3-2a2ae2dbcce4','temperature').subscribe(result => {
+      const options: any = {
+        chart: {
+          type: 'scatter',
+          height: 700
+        },
+        title: {
+          text: 'Sample Scatter Plot'
+        },
+        credits: {
+          enabled: false
+        },
+        tooltip: {
+          formatter: function() {
+            return `x: ${Highcharts.dateFormat('%e %b %y %H:%M:%S', this.x)} y: ${this.y.toFixed(2)}`;
+          }
+        },
+        xAxis: {
+          type: 'datetime',
+          labels: {
+            formatter: function() {
+              return Highcharts.dateFormat('%e %b %y', this.value);
+            }
+          }
+        },
+        series: [
+          {
+            name: 'Normal',
+            turboThreshold: 500000,
+            data: [[new Date('2018-01-25 18:38:31').getTime(), 2]]
+          },
+          {
+            name: 'Abnormal',
+            turboThreshold: 500000,
+            data: [[new Date('2018-02-05 18:38:31').getTime(), 7]]
+          }
+        ]
+      };
+  
+  
+      Highcharts.chart('container', options);
+    });
 
     this.zonesService.getZones(1).subscribe(result => {
       this.zones = result;
