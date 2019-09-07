@@ -22,7 +22,7 @@ import { ScheduleDialog } from './dashboard/schedule-dialog/schedule.dialog';
 import { ForecastDialog } from './dashboard/forecast-dialog/forecast.dialog';
 import { LoadingDialog } from './loading/loading.dialog';
 import { LoadingService } from './loading/loading.service';
-const config: SocketIoConfig = { url: 'http://localhost:3000', options: {}};
+const config: SocketIoConfig = { url: 'http://wpatrik.ddns.net:3000', options: {}};
 
 @NgModule({
   declarations: [

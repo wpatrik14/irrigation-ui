@@ -14,10 +14,14 @@ export class SensorsService {
   }
 
   getLatestValue(clientId: string, type: string) {
-    return this.httpClient.get<any>(`http://wpatrik.ddns.net:3000/api/sensors/${clientId}/${type}/latest`);
+    return this.httpClient.get<any>(`/api/sensors/${clientId}/${type}/latest`);
   }
 
   getAllValues(clientId: string, type: string) {
-    return this.httpClient.get<any>(`http://wpatrik.ddns.net:3000/api/sensors/${clientId}/${type}`);
+    return this.httpClient.get<any>(`/api/sensors/${clientId}/${type}`);
+  }
+
+  getTypes(clientId: string) {
+    return this.httpClient.get<any>(`/api/sensors/types?clientId=${clientId}`);
   }
 }

@@ -122,11 +122,19 @@ export class DashboardComponent implements OnInit {
       this.zones.forEach(zone => {
         zone.relay.durationInfo = DashboardComponent.getDuration(zone.relay.lastStartOnUTC, zone.relay.lastEndOnUTC);
         zone.sensors.forEach(sensor => {
-          this.sensorsService.getLatestValue(sensor.clientId, 'temperature').subscribe(result => {
-            console.log(result.Items[0].value);
-            sensor.value = result.Items[0].value;
-            sensor.insertedOnUTC = result.Items[0].insertedOnDate;
-            sensor.unit = result.Items[0].unit;
+          sensor.values = [];
+          this.sensorsService.getTypes(sensor.clientId).subscribe(types => {
+            types.Items.forEach(type => {
+              this.sensorsService.getLatestValue(sensor.clientId, type.type).subscribe(result => {
+                console.log(result.Items[0].value);
+                sensor.values.push({
+                  type: result.Items[0].type,
+                  value: result.Items[0].value,
+                  unit: result.Items[0].unit,
+                  insertedOnUTC: result.Items[0].insertedOnTimestamp,
+                });
+              });
+            });
           });
         });
       })
@@ -144,11 +152,7 @@ export class DashboardComponent implements OnInit {
 
     this.sensorsService.sensorValueChanged().subscribe((sensorView: SensorView) => {
       console.log(`Received socket ${JSON.stringify(sensorView)}`);
-      this.zones.forEach(zone => {
-        const sensor = zone.sensors.find(sensor => sensor.clientId===sensorView.clientId);
-        sensor.value = sensorView.value;
-        return;
-      });
+      /* Not yet implemented */
     });
   }
 

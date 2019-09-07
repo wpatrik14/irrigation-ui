@@ -84,8 +84,8 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <mat-list>
-          <mat-list-item *ngFor="let sensor of zone.sensors">
-            {{sensor.value}}{{sensor.unit==='celsius' ? '°C' : unit }} on {{sensor.insertedOnUTC | date:'yyyy-MM-dd HH:mm'}}
+          <mat-list-item *ngFor="let sensorValue of zone.sensors[0].values">
+            {{sensorValue.type}} is {{sensorValue.value}}{{sensorValue.unit==='celsius' ? '°C' : '%' }} on {{sensorValue.insertedOnUTC | date:'yyyy-MM-dd HH:mm'}}
           </mat-list-item>
         </mat-list>
       </mat-expansion-panel>
