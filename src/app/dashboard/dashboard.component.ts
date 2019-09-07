@@ -11,6 +11,8 @@ import { ForecastDialog } from './forecast-dialog/forecast.dialog';
 import { ForecastsService } from '../forecasts.service';
 import { LoadingService } from '../loading/loading.service';
 import * as Highcharts from 'highcharts';
+import { switchMap } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,14 +35,17 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.sensorsService.getAllValues('7c874a3a-aa00-11e9-a2a3-2a2ae2dbcce4','temperature').subscribe(result => {
+    const temperatures = this.sensorsService.getAllValues('7c874a3a-aa00-11e9-a2a3-2a2ae2dbcce4','temperature');
+    const humidity = this.sensorsService.getAllValues('7c874a3a-aa00-11e9-a2a3-2a2ae2dbcce4','humidity');
+    
+    forkJoin([temperatures, humidity]).subscribe(results => {
       const options: any = {
         chart: {
-          type: 'scatter',
-          height: 700
+          type: 'line',
+          height: 700,
         },
         title: {
-          text: 'Sample Scatter Plot'
+          text: 'History'
         },
         credits: {
           enabled: false
@@ -48,6 +53,11 @@ export class DashboardComponent implements OnInit {
         tooltip: {
           formatter: function() {
             return `x: ${Highcharts.dateFormat('%e %b %y %H:%M:%S', this.x)} y: ${this.y.toFixed(2)}`;
+          }
+        },
+        plotOptions: {
+          series: {
+            step: 'center',
           }
         },
         xAxis: {
@@ -58,16 +68,45 @@ export class DashboardComponent implements OnInit {
             }
           }
         },
+        yAxis: [{ // Primary yAxis
+          labels: {
+              format: '{value}°C',
+              style: {
+                  color: Highcharts.getOptions().colors[1]
+              }
+          },
+          title: {
+              text: 'Temperature',
+              style: {
+                  color: Highcharts.getOptions().colors[1]
+              }
+          }
+      }, { // Secondary yAxis
+          title: {
+              text: 'Humidity',
+              style: {
+                  color: Highcharts.getOptions().colors[0]
+              }
+          },
+          labels: {
+              format: '{value}%',
+              style: {
+                  color: Highcharts.getOptions().colors[0]
+              }
+          },
+          opposite: true
+      }],
         series: [
           {
-            name: 'Normal',
-            turboThreshold: 500000,
-            data: [[new Date('2018-01-25 18:38:31').getTime(), 2]]
+            name: 'Temperature',
+            type: 'line',
+            data: results[0].Items.map(item => [item.insertedOnTimestamp, item.value])
           },
           {
-            name: 'Abnormal',
-            turboThreshold: 500000,
-            data: [[new Date('2018-02-05 18:38:31').getTime(), 7]]
+            name: 'Humidity',
+            type: 'spline',
+            yAxis: 1,
+            data: results[1].Items.map(item => [item.insertedOnTimestamp, item.value])
           }
         ]
       };
@@ -75,7 +114,9 @@ export class DashboardComponent implements OnInit {
   
       Highcharts.chart('container', options);
     });
-
+    
+    
+      
     this.zonesService.getZones(1).subscribe(result => {
       this.zones = result;
       this.zones.forEach(zone => {

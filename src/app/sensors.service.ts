@@ -18,6 +18,6 @@ export class SensorsService {
   }
 
   getAllValues(clientId: string, type: string) {
-    return this.httpClient.get(`http://wpatrik.ddns.net:3000/api/sensors/${clientId}/${type}`);
+    return this.httpClient.get<any>(`http://wpatrik.ddns.net:3000/api/sensors/${clientId}/${type}`);
   }
 }
