@@ -27,7 +27,7 @@ export class RelaysService {
     this.spinnerRef = this.loadingService.start();
     setTimeout(() => {
       this.spinnerRef.close();
-    }, 2000);
+    }, 5000);
     
     return this.httpClient.post<RelayView>(`/api/relays/switch`, {
       endpoint: relay.endpoint,
@@ -39,7 +39,9 @@ export class RelaysService {
   }
 
   relayStateChanged(){
-    this.spinnerRef.close();
+    if (this.spinnerRef) {
+      this.spinnerRef.close();
+    }
     return this.socket.fromEvent('relayStateChanged');
   }
 }
