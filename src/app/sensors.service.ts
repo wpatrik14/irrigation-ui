@@ -13,12 +13,12 @@ export class SensorsService {
     return this.socket.fromEvent('sensorValueChanged');
   }
 
-  getLatestValue(clientId: string, type: string) {
-    return this.httpClient.get<any>(`/api/sensors/${clientId}/${type}/latest`);
-  }
-
-  getAllValues(clientId: string, type: string) {
-    return this.httpClient.get<any>(`/api/sensors/${clientId}/${type}`);
+  getValues(clientId: string, type: string, limit?: number) {
+    if (limit) {
+      return this.httpClient.get<any>(`/api/sensors/${clientId}/${type}?limit=${limit}`);
+    } else {
+      return this.httpClient.get<any>(`/api/sensors/${clientId}/${type}`);
+    }
   }
 
   getTypes(clientId: string) {

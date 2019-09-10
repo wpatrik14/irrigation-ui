@@ -35,8 +35,8 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    const temperatures = this.sensorsService.getAllValues('7c874a3a-aa00-11e9-a2a3-2a2ae2dbcce4','temperature');
-    const humidity = this.sensorsService.getAllValues('7c874a3a-aa00-11e9-a2a3-2a2ae2dbcce4','humidity');
+    const temperatures = this.sensorsService.getValues('7c874a3a-aa00-11e9-a2a3-2a2ae2dbcce4','temperature');
+    const humidity = this.sensorsService.getValues('7c874a3a-aa00-11e9-a2a3-2a2ae2dbcce4','humidity');
     
     forkJoin([temperatures, humidity]).subscribe(results => {
       const options: any = {
@@ -72,26 +72,26 @@ export class DashboardComponent implements OnInit {
           labels: {
               format: '{value}°C',
               style: {
-                  color: Highcharts.getOptions().colors[1]
+                  color: Highcharts.getOptions().colors[0]
               }
           },
           title: {
               text: 'Temperature',
               style: {
-                  color: Highcharts.getOptions().colors[1]
+                  color: Highcharts.getOptions().colors[0]
               }
           }
       }, { // Secondary yAxis
           title: {
               text: 'Humidity',
               style: {
-                  color: Highcharts.getOptions().colors[0]
+                  color: Highcharts.getOptions().colors[1]
               }
           },
           labels: {
               format: '{value}%',
               style: {
-                  color: Highcharts.getOptions().colors[0]
+                  color: Highcharts.getOptions().colors[1]
               }
           },
           opposite: true
@@ -125,7 +125,7 @@ export class DashboardComponent implements OnInit {
           sensor.values = [];
           this.sensorsService.getTypes(sensor.clientId).subscribe(types => {
             types.Items.forEach(type => {
-              this.sensorsService.getLatestValue(sensor.clientId, type.type).subscribe(result => {
+              this.sensorsService.getValues(sensor.clientId, type.type, 1).subscribe(result => {
                 console.log(result.Items[0].value);
                 sensor.values.push({
                   type: result.Items[0].type,
@@ -150,8 +150,8 @@ export class DashboardComponent implements OnInit {
       relay.durationInfo = DashboardComponent.getDuration(relay.lastStartOnUTC, relay.lastEndOnUTC);
     });
 
-    this.sensorsService.sensorValueChanged().subscribe((sensorView: SensorView) => {
-      console.log(`Received socket ${JSON.stringify(sensorView)}`);
+    this.sensorsService.sensorValueChanged().subscribe((value: any) => {
+      console.log(`Received socket ${JSON.stringify(value)}`);
       /* Not yet implemented */
     });
   }
