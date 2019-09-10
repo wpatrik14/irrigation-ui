@@ -104,7 +104,7 @@ export class DashboardComponent implements OnInit {
           },
           {
             name: 'Humidity',
-            type: 'spline',
+            type: 'line',
             yAxis: 1,
             data: results[1].Items.map(item => [item.insertedOnTimestamp, item.value])
           }
@@ -150,9 +150,13 @@ export class DashboardComponent implements OnInit {
       relay.durationInfo = DashboardComponent.getDuration(relay.lastStartOnUTC, relay.lastEndOnUTC);
     });
 
-    this.sensorsService.sensorValueChanged().subscribe((value: any) => {
-      console.log(`Received socket ${JSON.stringify(value)}`);
-      /* Not yet implemented */
+    this.sensorsService.sensorValueChanged().subscribe((sensorView: SensorView) => {
+      console.log(`Received socket ${JSON.stringify(sensorView)}`);
+      this.zones.forEach(zone => {
+        const sensor = zone.sensors.find(sensor => sensor.clientId===sensorView.clientId);
+        const value = sensor.values.find(value => value.type===sensorView.values[0].type);
+        value.value = sensorView.values[0].value;
+      });
     });
   }
 
