@@ -1,7 +1,7 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ZonesService } from '../zones.service';
 import { ZoneView, RelayView, SensorView, ScheduleView } from 'src/app/entities';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { RelaysService } from '../relays.service';
 import { SensorsService } from '../sensors.service';
 import { SchedulesService } from '../schedules.service';
@@ -11,7 +11,6 @@ import { ForecastDialog } from './forecast-dialog/forecast.dialog';
 import { ForecastsService } from '../forecasts.service';
 import { LoadingService } from '../loading/loading.service';
 import * as Highcharts from 'highcharts';
-import { switchMap } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -25,98 +24,16 @@ export class DashboardComponent implements OnInit {
   public spinnerRef;
 
   constructor(
-    private zonesService: ZonesService, 
-    private relaysService: RelaysService, 
-    private sensorsService: SensorsService, 
+    private zonesService: ZonesService,
+    private relaysService: RelaysService,
+    private sensorsService: SensorsService,
     private schedulesService: SchedulesService,
-    private forecastsService: ForecastsService, 
+    private forecastsService: ForecastsService,
     public dialog: MatDialog,
     public loadingService: LoadingService) {
   }
 
   ngOnInit() {
-    const temperatures = this.sensorsService.getValues('7c874a3a-aa00-11e9-a2a3-2a2ae2dbcce4','temperature');
-    const humidity = this.sensorsService.getValues('7c874a3a-aa00-11e9-a2a3-2a2ae2dbcce4','humidity');
-    
-    forkJoin([temperatures, humidity]).subscribe(results => {
-      const options: any = {
-        chart: {
-          type: 'line',
-          height: 700,
-        },
-        title: {
-          text: 'History'
-        },
-        credits: {
-          enabled: false
-        },
-        tooltip: {
-          formatter: function() {
-            return `x: ${Highcharts.dateFormat('%e %b %y %H:%M:%S', this.x)} y: ${this.y.toFixed(2)}`;
-          }
-        },
-        plotOptions: {
-          series: {
-            step: 'center',
-          }
-        },
-        xAxis: {
-          type: 'datetime',
-          labels: {
-            formatter: function() {
-              return Highcharts.dateFormat('%e %b %y', this.value);
-            }
-          }
-        },
-        yAxis: [{ // Primary yAxis
-          labels: {
-              format: '{value}°C',
-              style: {
-                  color: Highcharts.getOptions().colors[0]
-              }
-          },
-          title: {
-              text: 'Temperature',
-              style: {
-                  color: Highcharts.getOptions().colors[0]
-              }
-          }
-      }, { // Secondary yAxis
-          title: {
-              text: 'Humidity',
-              style: {
-                  color: Highcharts.getOptions().colors[1]
-              }
-          },
-          labels: {
-              format: '{value}%',
-              style: {
-                  color: Highcharts.getOptions().colors[1]
-              }
-          },
-          opposite: true
-      }],
-        series: [
-          {
-            name: 'Temperature',
-            type: 'line',
-            data: results[0].Items.map(item => [item.insertedOnTimestamp, item.value])
-          },
-          {
-            name: 'Humidity',
-            type: 'line',
-            yAxis: 1,
-            data: results[1].Items.map(item => [item.insertedOnTimestamp, item.value])
-          }
-        ]
-      };
-  
-  
-      Highcharts.chart('container', options);
-    });
-    
-    
-      
     this.zonesService.getZones(1).subscribe(result => {
       this.zones = result;
       this.zones.forEach(zone => {
@@ -137,12 +54,12 @@ export class DashboardComponent implements OnInit {
             });
           });
         });
-      })
+      });
     });
 
     this.relaysService.relayStateChanged().subscribe((relayView: RelayView) => {
       console.log(`Received socket ${JSON.stringify(relayView)}`);
-      const zone = this.zones.find(zone => zone.relay.clientId===relayView.clientId && zone.relay.gpio===relayView.gpio);
+      const zone = this.zones.find(zone => zone.relay.clientId === relayView.clientId && zone.relay.gpio === relayView.gpio);
       const relay = zone.relay;
       relay.status = relayView.status;
       relay.lastStartOnUTC = relayView.lastStartOnUTC;
@@ -153,8 +70,8 @@ export class DashboardComponent implements OnInit {
     this.sensorsService.sensorValueChanged().subscribe((sensorView: SensorView) => {
       console.log(`Received socket ${JSON.stringify(sensorView)}`);
       this.zones.forEach(zone => {
-        const sensor = zone.sensors.find(sensor => sensor.clientId===sensorView.clientId);
-        const value = sensor.values.find(value => value.type===sensorView.values[0].type);
+        const sensor = zone.sensors.find(sensor => sensor.clientId === sensorView.clientId);
+        const value = sensor.values.find(value => value.type === sensorView.values[0].type);
         value.value = sensorView.values[0].value;
       });
     });
@@ -165,13 +82,14 @@ export class DashboardComponent implements OnInit {
       // Turn ON
       const dialogRef = this.dialog.open(SwitchDialog, {
         width: '400px',
-        data: {}});
-  
+        data: {}
+      });
+
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           const duration = parseInt(result);
           this.relaysService.switchOn(zone.relay, duration).subscribe(result => {
-           
+
           });
         }
       });
@@ -199,27 +117,28 @@ export class DashboardComponent implements OnInit {
           zone.forecast = forecast;
         });
       }
-    });    
+    });
   }
 
   async addSchedule(zone: ZoneView) {
     const dialogRef = this.dialog.open(ScheduleDialog, {
       width: '400px',
-      data: {}});
+      data: {}
+    });
 
     dialogRef.afterClosed().subscribe(schedule => {
       if (schedule) {
-        schedule.enabled=true;
+        schedule.enabled = true;
         this.schedulesService.addSchedule(zone, schedule).subscribe(result => {
           zone.schedules.push(schedule);
         });
       }
-    });    
+    });
   }
 
   async toogleForecast(zone: ZoneView) {
     this.forecastsService.toogleForecast(zone.forecast).subscribe(result => {
-      zone.forecast.enabled=result.enabled;
+      zone.forecast.enabled = result.enabled;
     });
   }
 
@@ -241,8 +160,8 @@ export class DashboardComponent implements OnInit {
   static getDuration(startDate: string, endDate: string) {
     const start = new Date(startDate).getTime();
     const end = new Date(endDate).getTime();
-    if (end-start>0) {
-      return `${Math.round(((end-start) / 1000 / 60) * 100) / 100} minutes`;
+    if (end - start > 0) {
+      return `${Math.round(((end - start) / 1000 / 60) * 100) / 100} minutes`;
     } else {
       return "Irrigation in progress...";
     }
