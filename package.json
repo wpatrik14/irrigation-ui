@@ -35,7 +35,7 @@
     "@ng-toolkit/universal": "^1.1.21",
     "aws-amplify": "^1.1.29",
     "aws-iot-device-sdk": "^2.2.1",
-    "aws-sdk": "^2.480.0",
+    "aws-sdk": "^2.814.0",
     "aws-serverless-express": "^3.2.0",
     "cors": "~2.8.4",
     "cp-cli": "^1.1.0",
